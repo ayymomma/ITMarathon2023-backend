@@ -32,5 +32,5 @@ class TimeInterval(Base):
     __tablename__ = "time_interval"
     time_interval_id = Column(Integer, primary_key=True, index=True)
     date = Column(DateTime)
-    time_interval_start = Column(DateTime)
-    time_interval_end = Column(DateTime)
+    time_interval_start = Column(String)
+    time_interval_end = Column(String)
