@@ -7,6 +7,11 @@ class UserDDO(BaseModel):
     email: str
 
 
+class UserNoPasswordDDO(BaseModel):
+    user_id: int
+    email: str
+
+
 class UserLoginDDO(BaseModel):
     email: str
     password: str
@@ -18,5 +23,6 @@ class UserRegisterDDO(BaseModel):
 
 
 class UserEmailAndNameDDO(BaseModel):
+    user_id: int
     name: str
     email: str

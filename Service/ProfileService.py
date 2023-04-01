@@ -46,7 +46,7 @@ def get_all_users(page: int, items_per_page: int, db: Session = Depends(get_db),
     for user in all_users:
         profile = get_profile(user_id=user_id, db=db, requested_user_id=user.user_id)
         user_name = profile.first_name + " " + profile.last_name
-        user_ddo = UserEmailAndNameDDO(name=user_name, email=user.email)
+        user_ddo = UserEmailAndNameDDO(user_id=user.user_id, name=user_name, email=user.email)
 
         result.append(user_ddo)
 
@@ -64,7 +64,7 @@ def search_profile_by_string(search_string: str, db: Session = Depends(get_db),
     for profile in selected_profiles:
         user = db.query(models.User).filter(models.User.user_id == profile.user_id).first()
         user_name = profile.first_name + " " + profile.last_name
-        user_ddo = UserEmailAndNameDDO(name=user_name, email=user.email)
+        user_ddo = UserEmailAndNameDDO(user_id=profile.user_id, name=user_name, email=user.email)
 
         result.append(user_ddo)
 

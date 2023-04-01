@@ -2,6 +2,7 @@ import uvicorn as uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from Controller.InvitationController import invitation
 from Controller.ProfileController import profile
 from Controller.TimeController import time
 from Controller.UserController import user
@@ -21,6 +22,7 @@ app.add_middleware(
 app.include_router(user, prefix="/api/user")
 app.include_router(profile, prefix="/api/profile")
 app.include_router(time, prefix="/api/time")
+app.include_router(invitation, prefix="/api/invitation")
 
 
 if __name__ == "__main__":

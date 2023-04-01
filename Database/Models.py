@@ -34,3 +34,21 @@ class TimeInterval(Base):
     date = Column(DateTime)
     time_interval_start = Column(String)
     time_interval_end = Column(String)
+
+
+class InvitationRequest(Base):
+    __tablename__ = "invitation_request"
+    invitation_request_id = Column(Integer, primary_key=True, index=True)
+    invite_id = Column(Integer, ForeignKey("invitation.invite_id"))
+    user_id = Column(Integer, ForeignKey("user.user_id"))
+    status = Column(String, nullable=True)
+
+
+class Invitation(Base):
+    __tablename__ = "invitation"
+    invite_id = Column(Integer, primary_key=True, index=True)
+    time_interval_id = Column(Integer, ForeignKey("time_interval.time_interval_id"))
+    place = Column(String, nullable=False)
+    comment = Column(String, nullable=True)
+
+
