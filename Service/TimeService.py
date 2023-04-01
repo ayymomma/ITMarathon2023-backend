@@ -1,12 +1,10 @@
-from datetime import datetime, time
-
 from fastapi import Depends, HTTPException, status
 from sqlalchemy.orm import Session
 import Database.Models as models
 from DDO.TimeIntervalDDO import TimeIntervalDDO, TimeIntervalUpdateDDO
 
 from Service.UserService import auth_handler, get_db
-from Service.UtilsService import is_time_interval_valid, str_to_datetime
+from Service.UtilsService import is_time_interval_valid, str_to_datetime, date_now_string
 
 
 def get_time_interval(time_interval_id: int = None, user_id: int = Depends(auth_handler.auth_wrapper),
@@ -36,7 +34,7 @@ def create_time_interval(time_interval: TimeIntervalDDO, user_id: int = Depends(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail='Time interval start time must be less than end time.')
 
-    created_interval = models.TimeInterval(date=str_to_datetime(datetime.now().strftime("%d-%m-%Y")),
+    created_interval = models.TimeInterval(date=date_now_string(),
                                            time_interval_start=time_start,
                                            time_interval_end=time_end)
 
@@ -64,7 +62,7 @@ def update_time_interval(time_interval_update: TimeIntervalUpdateDDO, user_id: i
 
     # verify each field is not None
     # TODO: Validate time format.
-    if time_interval_update.date is not None:
+    if time_interval_update.date is not None and time_interval_update.date != "":
         try:
             time_interval.date = str_to_datetime(time_interval_update.date)
         except Exception as e:
