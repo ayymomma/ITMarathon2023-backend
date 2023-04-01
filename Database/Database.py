@@ -13,5 +13,3 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
 
-tickets_database = TinyDB('tickets.json')
-tickets_query = Query()

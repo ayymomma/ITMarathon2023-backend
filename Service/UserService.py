@@ -3,10 +3,10 @@ from sqlalchemy.orm import Session
 
 from Auth.AuthHandler import AuthHandler
 from DDO.UserDDO import UserRegisterDDO, UserLoginDDO
-from DataBase.Database import SessionLocal
-import DataBase.Models as models
+from Database.Database import SessionLocal
+import Database.Models as models
 
-from DataBase.Database import engine
+from Database.Database import engine
 
 models.Base.metadata.create_all(bind=engine)
 auth_handler = AuthHandler()
