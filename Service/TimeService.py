@@ -65,7 +65,7 @@ def update_time_interval(time_interval_update: TimeIntervalUpdateDDO, user_id: i
     if time_interval_update.date is not None and time_interval_update.date != "":
         try:
             time_interval.date = str_to_datetime(time_interval_update.date)
-        except Exception as e:
+        except Exception:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                                 detail='Bad date format.')
     if time_interval_update.time_interval_start is not None and time_interval_update.time_interval_start != "":
@@ -80,3 +80,10 @@ def update_time_interval(time_interval_update: TimeIntervalUpdateDDO, user_id: i
     db.commit()
     db.refresh(time_interval)
     return {"message": "Time interval updated successfully"}
+
+
+def delete_time_interval(time_interval_id: int, user_id: int = Depends(auth_handler.auth_wrapper),
+                         db: Session = Depends(get_db)):
+    db.query(models.TimeInterval).filter(models.TimeInterval.time_interval_id == time_interval_id).delete()
+    db.commit()
+    return {"message": "Time interval deleted successfully"}

@@ -18,7 +18,7 @@ class UserProfile(Base):
     dept = Column(String)
     office_name = Column(String)
     team_name = Column(String)
-    floor_number = Column(Integer)
+    floor_number = Column(String)
 
 
 class AvailableTime(Base):

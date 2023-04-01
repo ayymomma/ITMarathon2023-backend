@@ -15,3 +15,8 @@ class UserLoginDDO(BaseModel):
 class UserRegisterDDO(BaseModel):
     password: str
     email: str
+
+
+class UserEmailAndNameDDO(BaseModel):
+    name: str
+    email: str
