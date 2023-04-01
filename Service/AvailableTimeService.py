@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 import Database.Models as models
 from DDO.AvailableTimeDDO import AvailableTimeUserDDO, AvailableTimeDDO
 from DDO.TimeIntervalDDO import TimeIntervalDDO, TimeIntervalVerboseDDO
-from Service.TimeService import get_time_interval, create_time_interval
+from Service.TimeService import get_time_interval, create_time_interval, delete_time_interval
 
 from Service.UserService import auth_handler, get_db
 from Service.UtilsService import str_to_datetime, strip_datetime_to_date, date_to_string
@@ -17,7 +17,7 @@ def get_user_availability(user_id: int = Depends(auth_handler.auth_wrapper),
                           db: Session = Depends(get_db)):
     if requested_user_id is None or requested_user_id == "":
         requested_user_id = user_id
-    if requested_date is None:
+    if requested_date is None or requested_date == "":
         date_as_datetime = strip_datetime_to_date(datetime.now())
     else:
         try:
@@ -47,7 +47,6 @@ def get_user_availability(user_id: int = Depends(auth_handler.auth_wrapper),
 def create_availability(time_interval: TimeIntervalDDO, user_id: int = Depends(auth_handler.auth_wrapper),
                         db: Session = Depends(get_db)):
     # TODO: check for time to not intersect with other
-
     # create time_interval
     created_time_interval = create_time_interval(time_interval, user_id, db)
 
@@ -63,3 +62,22 @@ def create_availability(time_interval: TimeIntervalDDO, user_id: int = Depends(a
                                         time_interval_start=created_time_interval.time_interval_start,
                                         time_interval_end=created_time_interval.time_interval_end)
     return AvailableTimeDDO(user_id=user_id, time_interval=time_interval_ddo)
+
+
+def delete_availability(time_interval_id: int, user_id: int = Depends(auth_handler.auth_wrapper),
+                        db: Session = Depends(get_db)):
+    # check if that availability exists
+    try:
+        availability_interval = db.query(models.AvailableTime).filter(
+            models.AvailableTime.user_id == user_id and models.AvailableTime.time_interval_id == time_interval_id) \
+            .first()
+    except Exception:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Availability not found.')
+
+    # delete availability
+    db.query(models.AvailableTime).filter(models.AvailableTime.timeline_id == availability_interval.time_interval_id).delete()
+    db.commit()
+
+    # delete time_interval
+    delete_time_interval(time_interval_id, user_id, db)
+    return {"message": "Availability and associated time interval deleted successfully"}

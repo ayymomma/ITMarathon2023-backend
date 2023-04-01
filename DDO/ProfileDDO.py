@@ -7,7 +7,7 @@ class ProfileDDO(BaseModel):
     dept: str
     office_name: str
     team_name: str
-    floor_number: int
+    floor_number: str
 
 
 class ProfileUpdateDDO(BaseModel):
@@ -16,5 +16,5 @@ class ProfileUpdateDDO(BaseModel):
     dept: str
     office_name: str
     team_name: str
-    floor_number: int
+    floor_number: str
 
