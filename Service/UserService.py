@@ -34,6 +34,13 @@ def create_user(user_register: UserRegisterDDO, db: Session = Depends(get_db)):
     db.add(user_model)
     db.commit()
     db.refresh(user_model)
+
+    user_profile = models.UserProfile(user_id=user_model.user_id, first_name="dummy", last_name="dummy", dept="dummy",
+                                      office_name="dummy", team_name="dummy", floor_number=0)
+
+    db.add(user_profile)
+    db.commit()
+    db.refresh(user_profile)
     return {"message": "User created"}
 
 
